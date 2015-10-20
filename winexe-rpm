@@ -1,0 +1,74 @@
+#!/bin/bash
+
+SCRIPT=$(basename ${0})
+VER="1.1"
+GITHASH="b787d2a2c4b1abc3653bad10aec943b8efcd7aab"
+
+function help() {
+  echo ""
+  echo "Script to build winexe RPMs"
+  echo ""
+  echo "Syntax: "
+  echo ""
+  echo "${SCRIPT}"
+  echo ""
+  exit 1
+}
+
+function print_invalid_syntax() {
+  echo "Invalid syntax, use ${SCRIPT} -h"
+}
+
+function check_create_dir() {
+  if [ ! -d "./$1" ]; then
+    mkdir "./$1"
+  fi
+}
+
+function create_build_env() {
+  check_create_dir BUILD
+  check_create_dir BUILDROOT
+  check_create_dir RPMS
+  check_create_dir SOURCES
+  check_create_dir SPECS
+  check_create_dir SRPMS
+}
+
+function get_sources() {
+  if [ ! -f "./SOURCES/winexe-${2}.tar.gz" ]; then
+    git clone git://git.code.sf.net/p/winexe/winexe-waf winexe-${1}
+    PREVDIR=${PWD}
+    cd winexe-${1}
+    git checkout ${GITHASH}
+    cd ${PREVDIR}
+    tar -cvzf winexe-${1}.tar.gz winexe-${1}
+    mv winexe-${1}.tar.gz SOURCES/
+    rm -rf winexe-${1}
+  fi
+}
+
+function build_rpm() {
+  rpmbuild --define "_topdir `pwd`" -ba "SPECS/winexe.spec"
+  return ${?}
+}
+
+# Parse options
+while getopts ":h" opts; do
+  case "${opts}" in
+    h) help ;;
+    *) print_invalid_syntax
+       exit 1 ;;
+  esac
+done
+shift $((OPTIND-1))
+
+create_build_env
+get_sources ${VER} ${GITHASH}
+build_rpm
+if [ $? -eq 0 ]; then
+  echo Your packages are available at $PWD/RPMS.
+  exit 0
+else
+  echo There are errors. Check your log.
+  exit 2
+fi
