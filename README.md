@@ -22,7 +22,7 @@ To build:
 * mingw64-gcc
 * mingw32-gcc
 
-Building fresh RPMs
+Building fresh RPM
 -------------------
 
 Clone the repo: 
@@ -30,11 +30,7 @@ Clone the repo:
     git clone https://github.com/juliogonzalez/winexe-rpm.git
     cd winexe-rpm
 
-
-Build the winexe RPM
----------------------
-
-Build the RPMs:
+Build the RPM:
 
     ./winexe-rpm
 
