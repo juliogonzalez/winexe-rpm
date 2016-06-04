@@ -27,7 +27,7 @@ Building fresh RPMs
 
 Clone the repo: 
 
-    git@github.com:juliogonzalez/winexe-rpm.git
+    git clone https://github.com/juliogonzalez/winexe-rpm.git
     cd winexe-rpm
 
 
