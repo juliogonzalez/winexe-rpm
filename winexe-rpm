@@ -36,7 +36,7 @@ function create_build_env() {
 
 function get_sources() {
   if [ ! -f "./SOURCES/winexe-${2}.tar.gz" ]; then
-    git clone git://git.code.sf.net/p/winexe/winexe-waf winexe-${1}
+    git clone https://git.code.sf.net/p/winexe/winexe-waf winexe-${1}
     PREVDIR=${PWD}
     cd winexe-${1}
     git checkout ${GITHASH}
